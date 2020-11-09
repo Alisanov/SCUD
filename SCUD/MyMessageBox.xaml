@@ -1,0 +1,56 @@
+﻿<Window x:Class="SCUD.MyMessageBox"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SCUD"
+        mc:Ignorable="d"
+        Title="Message Box" Height="200" Width="400" WindowStartupLocation="CenterScreen" Style="{StaticResource Main}" WindowState="Normal" 
+        ShowInTaskbar="False" AllowsTransparency="True"
+        ResizeMode="NoResize" WindowStyle="None" MouseLeftButtonDown="MessageBox_MouseLeftButtonDown" Opacity="0.01" x:Name="MessageBox">
+    <Window.Triggers>
+        <EventTrigger RoutedEvent="Loaded">
+            <BeginStoryboard>
+                <Storyboard>
+                    <DoubleAnimation
+                                To="0.95"
+                                Duration="0:0:0.4"
+                                Storyboard.TargetProperty="Opacity"
+                                />
+                </Storyboard>
+            </BeginStoryboard>
+        </EventTrigger>
+        <!--<EventTrigger RoutedEvent="Drop">
+            <BeginStoryboard>
+                <Storyboard>
+                    <DoubleAnimation
+                                To="0.1"
+                                Duration="0:0:0.9"
+                                Storyboard.TargetProperty="Opacity"
+                                />
+                </Storyboard>
+            </BeginStoryboard>
+        </EventTrigger>-->
+    </Window.Triggers>
+    <Grid Background="#9A9A9A">
+        <Grid Margin="2" Background="#F3FAFF">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="7*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <TextBlock Name="Caption" Margin="10" Grid.Row="0"/>
+            <TextBlock Name="MessageContainer" TextWrapping="WrapWithOverflow" Margin="10" Grid.Row="1"/>
+            <StackPanel Name="ButtonContainer" Grid.Row="2" Orientation="Horizontal"
+                    HorizontalAlignment="Right" Margin="0,10,10,10">
+                <StackPanel.Resources>
+                    <Style TargetType="Button">
+                        <Setter Property="MinHeight" Value="25"/>
+                        <Setter Property="MinWidth" Value="75"/>
+                        <Setter Property="Margin" Value="10,0,0,0"/>
+                    </Style>
+                </StackPanel.Resources>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>

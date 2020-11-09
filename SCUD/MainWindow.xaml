@@ -1,0 +1,260 @@
+﻿<Window x:Name="window" x:Class="SCUD.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SCUD" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        mc:Ignorable="d"
+        Title="Система контроля и управления доступом" Style="{StaticResource Main}" WindowStartupLocation="CenterScreen"
+        WindowState="Normal" Height="400" Width="400"
+        >
+    <Grid>
+
+
+        <!--область входа-->
+        <Grid x:Name="loginWindow" Visibility="Collapsed">
+            <StackPanel   >
+                <TextBlock FontSize="18"  HorizontalAlignment="Center" Margin="20 100 20 0" Text="Вход в систему контроля и управления доступом" TextAlignment="Center" TextWrapping="Wrap" FontWeight="Bold"/>
+                <Label Content="Логин" />
+                <TextBox x:Name="login" Text="admin" Style="{StaticResource ShadowTextBox}"/>
+                <Label Content="Пароль" />
+                <PasswordBox x:Name="password" Password="admin" Style="{StaticResource ShadowPasswordBox}"/>
+                <TextBlock Margin="0 5 0 0" Height="0" x:Name="infoBar" FontSize="14" Foreground="Red" FontWeight="Bold" HorizontalAlignment="Center"/>
+                <Button Margin="20 5 20 0" Content="Войти" Style="{StaticResource ShadowButton}" Click="Enter"/>
+            </StackPanel>
+        </Grid>
+        <!--конец области входа-->
+
+        <!--главная область-->
+        <Grid x:Name="panel"  Visibility="Collapsed">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="70"/>
+                <RowDefinition/>
+                <RowDefinition Height="50"/>
+            </Grid.RowDefinitions>
+            <Grid Grid.ColumnSpan="3" Margin="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Canvas x:Name="Canvas" Background="Transparent" Height="25" VerticalAlignment="Top">
+                    <TextBlock  x:Name="mainText"  VerticalAlignment="Bottom" FontSize="16"  FontWeight="Bold">
+                        <TextBlock.Triggers>
+                            <EventTrigger RoutedEvent="TextBlock.Loaded">
+                                <EventTrigger.Actions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetProperty="(Canvas.Right)" From="1000 " To="-1500" 
+                                                     Duration="0:0:15" RepeatBehavior="Forever"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </EventTrigger.Actions>
+                            </EventTrigger>
+                        </TextBlock.Triggers>
+                    </TextBlock>
+                </Canvas>
+                <Button Margin="1" Content="Заполнить список сотрудников" Style="{StaticResource ShadowButton}" Click="EmployeeClick"/>
+                <Button Margin="1" Grid.Column="1"  Content="Заполнить справочники" Style="{StaticResource ShadowButton}" Click="DirictoryClick"/>
+                <Button Margin="1" Grid.Column="2" Content="Настройки" Style="{StaticResource ShadowButton}" />
+            </Grid>
+            <Grid Margin="5" Grid.Row="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition  Height="30"/>
+                    <RowDefinition  Height="70*"/>
+                </Grid.RowDefinitions>
+                <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="Список сотрудников" FontSize="14"  FontWeight="Bold"/>
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="30*"/>
+                        <ColumnDefinition Width="10*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox TextChanged="FindTextChanged" Style="{StaticResource ShadowTextBox}" Margin="5 0 5 0" x:Name="findText"/>
+                    <Button Click="FindClick" Content="Поиск" Style="{StaticResource ShadowButton}" Grid.Column="1"/>
+                </Grid>
+                <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
+                    <ListBox SelectionChanged="EmployeeListPanelSelectionChanged" x:Name="employeeListPanel" ItemTemplate="{StaticResource listEmployeePanel}"  
+                          Background="#F3FAFF" BorderThickness="0" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                  VirtualizingStackPanel.ScrollUnit="Pixel">
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel />
+                            </ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
+                    </ListBox>
+                </ScrollViewer>
+            </Grid>
+            <StackPanel Margin="5" Grid.Column="1" Grid.Row="1">
+                <GroupBox Header="Сотрудник">
+                    <StackPanel>
+                        <Label FontWeight="Black" FontSize="15" Content="" x:Name="name"/>
+                        <StackPanel x:Name="timeInput">
+                            
+                            <Grid Margin="2">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Label HorizontalAlignment="Left" Content="Дата:" />
+                                <DatePicker SelectedDateChanged="DateEmployeeSelectedDateChanged"   Grid.Column="1"  FontSize="14"  FontWeight="Bold" x:Name="dateEmployee"/>
+                            </Grid>
+                            
+                            <Grid Margin="2">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Label HorizontalAlignment="Left"  Content="Время прихода:" />
+                                <xctk:TimePicker FontSize="14" Grid.Column="1"  FontWeight="Bold" x:Name="timeStart" Text="8:00"/>
+                            </Grid>
+                            
+                            <Grid Margin="2">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Label HorizontalAlignment="Left" Content="Время ухода:" />
+                                <xctk:TimePicker FontSize="14"  Grid.Column="1" FontWeight="Bold" x:Name="timeEnd" Text="18:00"/>
+                            </Grid>
+                            
+                        </StackPanel>
+                        <CheckBox Click="CheckInputClick" x:Name="checkInput" Content="Заполнять автоматический"/>
+                        <Button Style="{StaticResource ShadowButton}" Margin="3" Content="Сотрудник пришел" Click="EmployeeGo"/>
+                        <Button Style="{StaticResource ShadowButton}" Margin="3" Content="Сотрудник ушел" Click="EmployeeLeave"/>
+                        
+                    </StackPanel>
+                </GroupBox>
+               
+            </StackPanel>
+            
+            <Grid  Grid.Row="1" Grid.Column="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition  Height="30*"/>
+                </Grid.RowDefinitions>
+                <TextBlock x:Name="employeeActualText" Margin="2" TextWrapping="Wrap" FontSize="14"  FontWeight="Bold"/>
+                <ScrollViewer Grid.Row="1" >
+                    <ListBox SelectionChanged="EmployeeListActualSelectionChanged" x:Name="employeeListActual" ItemTemplate="{StaticResource listEmployeePanelTime}"  
+                          Background="#F3FAFF" BorderThickness="0" ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                  VirtualizingStackPanel.ScrollUnit="Pixel">
+                    </ListBox>
+                </ScrollViewer>
+            </Grid>
+            <Grid Grid.Row="2" Grid.ColumnSpan="3">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Button  Style="{StaticResource ShadowButton}" Margin="3" Content="Сформировать отчет" Click="GenerateAReport"/>
+                <Button Grid.Column="1" Style="{StaticResource ShadowButton}" Margin="3" Content="Сформировать отчет по всем сотрудникам" Click="GenerateAReportAll"/>
+                <Button Grid.Column="2" Style="{StaticResource ShadowButton}" Margin="3" Content="Выбрать файл..." Click="SelectFile"/>
+            </Grid>
+        </Grid>
+        <!--конец главной области-->
+
+        <!--область работы со сотрудниками-->
+        <Grid x:Name="employeeArea" Margin="10" Visibility="Collapsed">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="30"/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition Height="50"/>
+            </Grid.RowDefinitions>
+
+            <Button Content="←" Style="{StaticResource DeleteImageButton}" Grid.RowSpan="3" VerticalAlignment="Top" Click="EmployeeClose"/>
+
+            <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto">
+                <ListBox  x:Name="employeeList" ItemTemplate="{StaticResource listEmployee}" Background="#F3FAFF" BorderThickness="0"
+                 ScrollViewer.IsDeferredScrollingEnabled="True"
+                 VirtualizingStackPanel.ScrollUnit="Pixel"/>
+            </ScrollViewer>
+
+            <Button Content="Удалить" Grid.Column="1" Grid.Row="1" Style="{StaticResource ShadowButton}" Click="DeleteEmployeeClick"/>
+
+            <GroupBox Header="Добавить сотрудника" Grid.Column="2" Grid.RowSpan="2">
+                <StackPanel>
+                    <Label Margin="20 10 0 0" Content="Имя" HorizontalAlignment="Left"/>
+                    <TextBox Style="{StaticResource ShadowTextBox}" x:Name="nameEmployee"/>
+                    <Label Margin="20 0" Content="Фамилия" HorizontalAlignment="Left"/>
+                    <TextBox Style="{StaticResource ShadowTextBox}" x:Name="lastnameEmployee"/>
+                    <Label Margin="20 0" Content="Должность" HorizontalAlignment="Left"/>
+                    <ComboBox Margin="20 0" x:Name="positionComboBox"/>
+                    <Label Margin="20 0" Content="Рабочая область" HorizontalAlignment="Left"/>
+                    <ComboBox Margin="20 0" x:Name="workareaComboBox"/>
+                    <Label Margin="20 0" Content="Отдел" HorizontalAlignment="Left"/>
+                    <ComboBox Margin="20 0" x:Name="departamentComboBox"/>
+                    <TextBlock Margin="0 5 0 0" Height="0" x:Name="infoBarEmployee" FontSize="14" Foreground="Red" FontWeight="Bold" HorizontalAlignment="Center"/>
+                    <Button Style="{StaticResource ShadowButton}" Margin="20 10" Content="Добавить" Click="InsertEmployeeClick"/>
+                </StackPanel>
+            </GroupBox>
+        </Grid>
+        <!--конец область работы со сотрудниками-->
+
+        <!--область справочники-->
+        <Grid x:Name="directoresArea"  Margin="5" Visibility="Collapsed">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="30"/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition Height="50"/>
+            </Grid.RowDefinitions>
+            <Button Content="←"  Style="{StaticResource DeleteImageButton}" Grid.RowSpan="2" VerticalAlignment="Top" Click="CloseDirictiry"/>
+            <!-- справочник отделы -->
+            <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto" Grid.RowSpan="2">
+                <StackPanel Margin="1" Grid.Column="0" GotFocus="Departament_GotFocus">
+                    <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="Список отделов" FontSize="14"  FontWeight="Bold"/>
+                    <ListBox  x:Name="departamentList" ItemTemplate="{StaticResource listDirectores}" 
+                 ScrollViewer.IsDeferredScrollingEnabled="True"
+                 VirtualizingStackPanel.ScrollUnit="Pixel" >
+                    </ListBox>
+                    <TextBox FontSize="15" x:Name="departamentText" FontWeight="Bold" Height="25"/>
+                    <Button Margin="1" Style="{StaticResource ShadowButton}"  Content="Добавить" Click="SaveDepartment"/>
+                </StackPanel>
+            </ScrollViewer>
+
+            <!-- справочник область работы -->
+            <ScrollViewer Grid.Column="2"  VerticalScrollBarVisibility="Auto" Grid.RowSpan="2" >
+                <StackPanel Margin="1" Grid.Column="1" Grid.Row="0" GotFocus="Workarea_GotFocus">
+                    <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="Список рабочих областей" FontSize="14"  FontWeight="Bold"/>
+                    <ListBox  x:Name="workareaList" ItemTemplate="{StaticResource listDirectores}"  
+                 ScrollViewer.IsDeferredScrollingEnabled="True"
+                 VirtualizingStackPanel.ScrollUnit="Pixel"/>
+                    <TextBox FontSize="15" x:Name="workareaText" FontWeight="Bold" Height="25"/>
+                    <Button Style="{StaticResource ShadowButton}" Margin="1" Content="Добавить" Click="SaveWorkarea" />
+                </StackPanel>
+            </ScrollViewer>
+
+            <!-- справочник должностей-->
+            <ScrollViewer Grid.Column="3"  VerticalScrollBarVisibility="Auto" Grid.RowSpan="2" >
+                <StackPanel Grid.Column="2" Grid.Row="0" Margin="1" GotFocus="Position_GotFocus">
+                    <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="Список должностей" FontSize="14"  FontWeight="Bold"/>
+                    <ListBox  x:Name="positionList" ItemTemplate="{StaticResource listDirectores}"  
+                 ScrollViewer.IsDeferredScrollingEnabled="True"
+                 VirtualizingStackPanel.ScrollUnit="Pixel">
+                    </ListBox>
+                    <TextBox FontSize="15" x:Name="positionText" FontWeight="Bold" Height="25"/>
+                    <Button Style="{StaticResource ShadowButton}" Margin="1" Content="Добавить" Click="SavePosition" />
+                </StackPanel>
+            </ScrollViewer>
+
+            <Button Grid.Row="2" Grid.ColumnSpan="4" Content="Удалить" Style="{StaticResource ShadowButton}"  Click="DeleteDirictory" Margin="0,10" />
+        </Grid>
+        <!--конец области справочники-->
+        
+    </Grid>
+
+</Window>
